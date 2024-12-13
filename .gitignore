@@ -1,0 +1,30 @@
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+bin/__pycache__/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore virtual environment directories
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore model files
+bin/modelsSavedLocally/
