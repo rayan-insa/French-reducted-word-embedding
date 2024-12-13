@@ -32,6 +32,9 @@ class AutoEncoder(nn.Module):
             nn.Linear(hidden_dim1, input_dim)
         )
 
+        # Store bottleneck output
+        self.bottleneck_output = None
+
     def forward(self, x):
         """
         Forward pass through the AutoEncoder.
@@ -42,6 +45,6 @@ class AutoEncoder(nn.Module):
         Returns:
             torch.Tensor: Reconstructed embeddings.
         """
-        encoded = self.encoder(x)
-        decoded = self.decoder(encoded)
+        self.bottleneck_output = self.encoder(x)  # Save bottleneck output
+        decoded = self.decoder(self.bottleneck_output)
         return decoded

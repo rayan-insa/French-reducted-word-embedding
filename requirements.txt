@@ -1,0 +1,6 @@
+fasttext
+numpy
+scikit-learn
+torch
+matplotlib
+pandas

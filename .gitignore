@@ -9,10 +9,6 @@ bin/__pycache__/
 
 # Ignore virtual environment directories
 venv/
-env/
-ENV/
-.venv/
-.ENV/
 
 # Ignore system files
 .DS_Store
@@ -28,3 +24,6 @@ Thumbs.db
 
 # Ignore model files
 bin/modelsSavedLocally/
+
+# Ignore data files
+bin/data/
