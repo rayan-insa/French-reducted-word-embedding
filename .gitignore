@@ -3,6 +3,7 @@
 *.pyo
 __pycache__/
 bin/__pycache__/
+bin/**/__pycache__/
 
 # Ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints/
@@ -22,8 +23,9 @@ Thumbs.db
 *.swp
 *.swo
 
-# Ignore model files
-bin/modelsSavedLocally/
-
 # Ignore data files
-bin/data/
+bin/data/**/*.npy
+bin/data/**/*.bin
+bin/data/**/*.pth
+bin/data/**/*.txt
+bin/data/**/*.csv
