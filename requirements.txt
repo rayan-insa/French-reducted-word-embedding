@@ -3,8 +3,5 @@ numpy
 scikit-learn
 torch
 matplotlib
-pandas
 wikipedia-api
 spacy
-random
-os
