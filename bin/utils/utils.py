@@ -12,17 +12,17 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.manifold import TSNE
 
 class DataSamplization():
-    def __init__(self, sampleNum=10000, modelBinPath='data/modelsSavedLocally/cc.fr.300.bin', csvSavePath='data/'):
+    def __init__(self, sampleNum=10000):
         """
         Initializes the DataSamplization class.
         Args:
             sampleNum (int): Number of most-used words to sample from the vocabulary (default: 10000).
             modelBinPath (str): Path to the FastText model binary file (default: 'bin/modelsSavedLocally/cc.fr.300.bin').
         """
-
-        self.modelBinPath = modelBinPath
+        os.makedirs("data/modelsSavedLocally", exist_ok=True)
+        self.modelBinPath = 'data/modelsSavedLocally'
         self.sampleNum = sampleNum
-        self.csvSaveFile = csvSavePath
+        self.csvSaveFile = 'data/vocab'
         self.fastTextBaseModel = self.loadFastTextBaseModel()
 
     def getWordId(self, word):
@@ -44,7 +44,8 @@ class DataSamplization():
         Returns:
             fasttext.FastText._FastText: The loaded FastText model.
         """
-        if os.path.exists(self.modelBinPath):
+        
+        if os.path.exists(self.modelBinPath+"/cc.fr.300.bin"):
             print("Loading saved FastText model...")
         else:
             print("Loading original FastText model...")
@@ -59,7 +60,7 @@ class DataSamplization():
         Returns the entire vocabulary of the FastText model.
         """
         self.entireVocab = self.fastTextBaseModel.get_words()
-        fileName = "vocabs/entire_vocabulary.csv"
+        fileName = "entire_vocabulary.csv"
         self.dataSampleIntoCSV(sampleVocabulary=self.entireVocab, fileName=fileName)
         return self.entireVocab
     
@@ -73,7 +74,7 @@ class DataSamplization():
         self.entire_vocabulary = self.fastTextBaseModel.get_words()
         # Excluding the 150 first most-used words because most of them are simple characters such as ()[]{},"';:/" etc
         self.sample_vocabulary = self.entire_vocabulary[150:self.sampleNum+150]
-        fileName = "vocabs/most_used_words.csv"
+        fileName = "most_used_words.csv"
         self.dataSampleIntoCSV(sampleVocabulary=self.sample_vocabulary, fileName=fileName)
         return self.sample_vocabulary
     
@@ -86,7 +87,7 @@ class DataSamplization():
         self.sampleNum = sampleNum
         self.entire_vocabulary = self.fastTextBaseModel.get_words()
         self.sample_vocabulary = random.sample(self.entire_vocabulary, self.sampleNum)
-        fileName = "vocabs/random_words.csv"
+        fileName = "random_words.csv"
         self.dataSampleIntoCSV(sampleVocabulary=self.sample_vocabulary, fileName=fileName)
         return self.sample_vocabulary
     
@@ -95,6 +96,7 @@ class DataSamplization():
         """
         Creates a CSV file with a sample of sampleNum most-used words from the vocabulary.
         """
+        os.makedirs(self.csvSaveFile, exist_ok=True)
         if not os.path.exists(self.csvSaveFile+fileName):
             with open(self.csvSaveFile+fileName, 'w') as f:
                 f.write("id,word\n")
