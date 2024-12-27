@@ -52,7 +52,7 @@ class DataSamplization():
             fasttext.util.download_model('fr', if_exists='ignore')
             print("Saving model for future use...")
         
-        model = fasttext.load_model(self.modelBinPath)
+        model = fasttext.load_model(self.modelBinPath+"/cc.fr.300.bin")
         return model
     
     def entireVocabulary(self):
@@ -245,41 +245,32 @@ def word2vecFineTuning(model, dataloader, epochs=150, lr=0.001):
 
     for epoch in range(epochs):
         epoch_loss = 0.0
-
         for target_ids, context_ids in dataloader:
             target_ids = target_ids.long()
             context_ids = context_ids.long()
             
-            # Forward pass
             optimizer.zero_grad()
-            scores = model(target_ids)  # Scores avec la forme [batch_size, vocab_size]
+            scores = model(target_ids)
             
-            # Compute loss
-            loss = criterion(scores, context_ids)  # context_ids : indices de classe
+            loss = criterion(scores, context_ids)
             loss.backward()
             optimizer.step()
 
             epoch_loss += loss.item()
 
-        # Average epoch loss
         avg_loss = epoch_loss / len(dataloader)
         if (epoch + 1) % 25 == 0 or epoch == 0:
             print(f"Epoch [{epoch+1}/{epochs}], Loss: {avg_loss:.4f}")
-
-        # Step scheduler
+    
         scheduler.step(avg_loss)
-
-        # Early stopping logic
         if avg_loss < best_loss:
             best_loss = avg_loss
             patience_counter = 0
         else:
             patience_counter += 1
-
         if patience_counter >= patience:
             print(f"Early stopping triggered at epoch {epoch+1}.")
             break
-        
         if epoch >= 50 and (best_loss - avg_loss) < 0.4:
             print(f"Early stopping triggered at epoch {epoch+1}.")
             break
